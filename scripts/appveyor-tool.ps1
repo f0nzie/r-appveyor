@@ -1,3 +1,4 @@
+# copy-paste from website
 if ( -not(Test-Path Env:\CRAN) ) {
   $CRAN = "https://cloud.r-project.org"
 }
