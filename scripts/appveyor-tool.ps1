@@ -118,10 +118,22 @@ Function InstallR {
   Rscript -e "sessionInfo()"
 }
 
+Function InstallRtools40 {
+  $rtoolsurl = $CRAN + "/bin/windows/Rtools/rtools40-x86_64.exe"
+
+  Progress ("Downloading Rtools40 from: " + $rtoolsurl)
+  & "C:\Program Files\Git\mingw64\bin\curl.exe" -s -o ../rtools40-x86_64.exe -L $rtoolsurl
+
+  Progress "Running Rtools40 installer"
+  Start-Process -FilePath ..\rtools40-x86_64.exe -ArgumentList /VERYSILENT -NoNewWindow -Wait
+
+  Progress "Setting PATH"
+  $env:PATH = 'c:\rtools40\usr\bin;c:\rtools40\mingw64\bin;' + $env:PATH
+}
+
 Function InstallRtools {
   if ( -not(Test-Path Env:\RTOOLS_VERSION) ) {
-    Progress "Determining Rtools version"
-    $rtoolsver = $(Invoke-WebRequest ($CRAN + "/bin/windows/Rtools/VERSION.txt")).Content.Split(' ')[2].Split('.')[0..1] -Join ''
+    $rtoolsver = '35'
   }
   Else {
     $rtoolsver = $env:RTOOLS_VERSION
