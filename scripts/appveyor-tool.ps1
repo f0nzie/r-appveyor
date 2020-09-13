@@ -120,6 +120,7 @@ Function InstallR {
 }
 
 Function InstallRtools40 {
+  # this function fixes the issue with the R package "remotes"
   $rtoolsurl = $CRAN + "/bin/windows/Rtools/rtools40-x86_64.exe"
 
   Progress ("Downloading Rtools40 from: " + $rtoolsurl)
@@ -180,8 +181,10 @@ Function Bootstrap {
 
   if ((Test-Path "src") -or ($env:USE_RTOOLS -eq "true") -or ($env:USE_RTOOLS -eq "yes")) {
     if ($rversion.StartsWith("3")) {
+      # if R version starts with "3" use classic Rtools
       InstallRtools
     } Else {
+      # for R >= 4.x
       InstallRtools40
     }
   }
