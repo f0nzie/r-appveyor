@@ -179,14 +179,18 @@ Function Bootstrap {
   InstallR
 
   if ((Test-Path "src") -or ($env:USE_RTOOLS -eq "true") -or ($env:USE_RTOOLS -eq "yes")) {
-    InstallRtools
+    if ($rversion.StartsWith("3")) {
+      InstallRtools
+    } Else {
+      InstallRtools40
+    }
   }
   Else {
     Progress "Skipping download of Rtools because src/ directory is missing."
   }
 
   Progress "Downloading and installing travis-tool.sh"
-  Invoke-WebRequest https://raw.githubusercontent.com/f0nzie/r-appveyor/master/r-travis/scripts/travis-tool.sh -OutFile "..\travis-tool.sh"
+  Invoke-WebRequest https://raw.githubusercontent.com/krlmlr/r-appveyor/master/r-travis/scripts/travis-tool.sh -OutFile "..\travis-tool.sh"
   echo '@bash.exe ../travis-tool.sh %*' | Out-File -Encoding ASCII .\travis-tool.sh.cmd
   cat .\travis-tool.sh.cmd
   bash -c "( echo; echo '^travis-tool\.sh\.cmd$' ) >> .Rbuildignore"
